@@ -2,19 +2,16 @@ from imports import *
 import torch
 import torch.optim as optim
 import matplotlib.pyplot as plt
-import torch.nn.functional as F
 
 from regression_model import Regression
-
 # loss function
-loss_function = torch.nn.MSELoss()
+loss_function = torch.nn.CrossEntropyLoss()
 train_accuracy = []
 test_accuracy = []
 
 model = Regression()
 model.to(device)
 # Define the optimizer
-
 optimizer = optim.SGD(model.parameters(),
                       lr=lr,
                       momentum=momentum,
@@ -33,8 +30,7 @@ for epoch in range(1, epochs + 1):
 
         # forward pass
         logits = model(images)
-        target = F.one_hot(labels, 10).float()
-        loss = loss_function(logits, target)
+        loss = loss_function(logits, labels)
 
         # backpropagation
         optimizer.zero_grad()
